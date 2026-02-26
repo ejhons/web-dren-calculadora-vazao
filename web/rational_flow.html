@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Calculadora de Vazão – Método Racional</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Calculadora de Vazão<br>Método Racional</h1>
+
+        <label for="area">Área da bacia (km²)</label>
+        <input type="number" id="area" step="0.001" min="0">
+
+        <label for="coef">Coeficiente de escoamento (C)</label>
+        <input type="number" id="coef" step="0.01" min="0" max="1">
+
+        <label for="intensity">Intensidade da chuva (mm/h)</label>
+        <input type="number" id="intensity" step="1" min="0">
+
+        <button onclick="calcular()">Calcular Vazão</button>
+
+        <div id="resultado" class="result" style="display:none;"></div>
+    </div>
+
+    <script>
+        function calcular() {
+            const areaKm2 = parseFloat(document.getElementById("area").value);
+            const C = parseFloat(document.getElementById("coef").value);
+            const intensityMmH = parseFloat(document.getElementById("intensity").value);
+
+            if (isNaN(areaKm2) || isNaN(C) || isNaN(intensityMmH)) {
+                alert("Preencha todos os campos corretamente.");
+                return;
+            }
+
+            // Conversões
+            const areaM2 = areaKm2 * 1_000_000;
+            const intensityMS = intensityMmH / 1000 / 3600;
+
+            // Método Racional
+            const Q = C * intensityMS * areaM2;
+
+            const resultadoDiv = document.getElementById("resultado");
+            resultadoDiv.style.display = "block";
+            resultadoDiv.innerHTML = `Vazão de pico (Q): <br>${Q.toFixed(3)} m³/s`;
+        }
+    </script>
+
+</body>
+
+</html>
