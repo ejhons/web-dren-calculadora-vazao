@@ -1,96 +1,54 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE-edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Aplicativos de Engenharia com diversas aplicações">
-    <meta name="keywords" content="engenharia,drenagem,saneamento,calculo">
-    <meta name="author" content="Everton Jhons">
-    <title>Aplicativos de Enegenharia</title>
-
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        .topo {
-            background-color: rgb(99, 57, 23);
-            text-align: center;
-            padding: 20px;
-            color: lemonchiffon;
-            font-size: large;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        .menu {
-            background-color: darkblue;
-            overflow: hidden;
-        }
-
-        .menu a {
-            color: beige;
-            padding: 14px 16px;
-            /*Posiciona na linha*/
-            float: left;
-            display: block;
-            /*Remove o underline nos links*/
-            text-decoration: none;
-        }
-
-        .items {
-            display: flex;
-        }
-
-        .panels a {
-            color: beige;
-            padding: 14px;
-            width: 40px;
-            background-color: brown;
-            text-decoration: none;
-        }
-
-        .section-tile {
-            border-bottom: black 2px;
-        }
-
-        .item {
-            padding: 14px 16px;
-        }
-    </style>
+    <title>Calculadora de Vazão – Método Racional</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-    <header class="topo">
-        <h1>Aplicativos Engenharia</h1>
-    </header>
-    <nav class="menu">
-        <a href="#">Início</a>
-        <a href="#">Sobre</a>
-    </nav>
 
-    <section class="panels">
-        <h2 class="section-title">Drenagem</h2>
-        <div class="items">
-            <div class="item">
-                <a href="#">Calculadora de vazão</a>
-            </div>
-            <div class="item">
-                <a href="#">Visualizador de IDF</a>
-            </div>
-            <div class="item">
-                <a href="#">Cálculo de Condutos livres</a>
-            </div>
-            <div class="item">
-                <a href="#">Cálculo de Sarjeta</a>
-            </div>
-        </div>
-    </section>
-    <hr>
-    <footer>
-        <a href="index.html">Voltar para a Principal</a>
-    </footer>
+    <div class="container">
+        <h1>Calculadora de Vazão<br>Método Racional</h1>
+
+        <label for="area">Área da bacia (km²)</label>
+        <input type="number" id="area" step="0.001" min="0">
+
+        <label for="coef">Coeficiente de escoamento (C)</label>
+        <input type="number" id="coef" step="0.01" min="0" max="1">
+
+        <label for="intensity">Intensidade da chuva (mm/h)</label>
+        <input type="number" id="intensity" step="1" min="0">
+
+        <button onclick="calcular()">Calcular Vazão</button>
+
+        <div id="resultado" class="result" style="display:none;"></div>
+    </div>
+
+    <script>
+        function calcular() {
+            const areaKm2 = parseFloat(document.getElementById("area").value);
+            const C = parseFloat(document.getElementById("coef").value);
+            const intensityMmH = parseFloat(document.getElementById("intensity").value);
+
+            if (isNaN(areaKm2) || isNaN(C) || isNaN(intensityMmH)) {
+                alert("Preencha todos os campos corretamente.");
+                return;
+            }
+
+            // Conversões
+            const areaM2 = areaKm2 * 1_000_000;
+            const intensityMS = intensityMmH / 1000 / 3600;
+
+            // Método Racional
+            const Q = C * intensityMS * areaM2;
+
+            const resultadoDiv = document.getElementById("resultado");
+            resultadoDiv.style.display = "block";
+            resultadoDiv.innerHTML = `Vazão de pico (Q): <br>${Q.toFixed(3)} m³/s`;
+        }
+    </script>
 
 </body>
 
